@@ -24,6 +24,10 @@ The ISO Market Dashboard is a web-based application designed to provide a compre
    - **Version**: 4.1.1
    - **CDN**: Included via CDN link in the HTML.
 
+5. **Alpine.js**
+   - **Purpose**: A lightweight JavaScript framework for adding interactivity. It pairs well with Tailwind CSS.
+   - **Website**: [Alpine.js](https://alpinejs.dev/)
+
 ## Project Structure
 1. **HTML**: Defines the structure of the webpage, including layout and links to CSS and JavaScript resources.
 2. **CSS**: Contains custom styling to enhance the appearance of the dashboard components.
@@ -33,6 +37,7 @@ The ISO Market Dashboard is a web-based application designed to provide a compre
 1. **Price Map**
    - Displays a placeholder for the price map with buttons to toggle between real-time and day-ahead views.
    - Styled with utility classes from Tailwind CSS.
+   - **Enhancements**: Updated buttons with different colors for better contrast and rounded edges for consistency.
 
 2. **Resource Mix**
    - Includes two doughnut charts showing the mix of natural gas, nuclear, renewables, hydro, and other resources.
@@ -45,6 +50,10 @@ The ISO Market Dashboard is a web-based application designed to provide a compre
 4. **Today's Snapshot**
    - A compact, grid-based layout displaying key statistics such as available capacity, forecasted peak demand, surplus capacity, and yesterday's peak demand.
    - Uses a combination of Tailwind CSS and custom CSS for styling.
+   - **Enhancements**: Improved layout for readability and consistency.
+
+5. **Buttons**
+   - "More Real-Time Data" and "Morning Report" buttons are styled with rounded edges and padding for better aesthetics and consistency with the theme.
 
 ## Next Steps
 1. **Data Integration**
