@@ -17,8 +17,32 @@ body {
 .snapshot {
     background-color: #2d3748; /* Slightly lighter dark color for contrast */
     color: white;
-    padding: 0.5rem; /* Reduce padding for a more compact look */
+    padding: 1rem;
     border-radius: 8px;
+}
+
+.snapshot-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.snapshot-item {
+    display: flex;
+    justify-content: space-between;
+    background-color: #394867;
+    padding: 0.5rem;
+    border-radius: 5px;
+}
+
+.snapshot-title {
+    font-weight: bold;
+    color: #a0aec0;
+}
+
+.snapshot-value {
+    color: white;
 }
 
 .chart-container {

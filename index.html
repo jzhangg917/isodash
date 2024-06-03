@@ -47,14 +47,29 @@
             <div class="col-md-4 system-demand p-4 text-white rounded animate__animated animate__fadeIn">
                 <h2>System Demand</h2>
                 <canvas id="demandChart"></canvas>
-                <div class="snapshot mt-4 p-2 text-white rounded">
+                <div class="snapshot mt-4 p-3 text-white rounded">
                     <h2 class="text-center">Today's Snapshot</h2>
-                    <div class="d-flex justify-content-around flex-wrap">
-                        <div>Available Capacity: <span id="availableCapacity">20,417 MW</span></div>
-                        <div>Forecasted Peak Demand: <span id="forecastedDemand">16,000 MW</span></div>
-                        <div>Surplus Capacity: <span id="surplusCapacity">2,136 MW</span></div>
-                        <div>Yesterday's Peak Demand: <span id="peakDemand">15,228 MW</span></div>
-                        <div>Status: <span class="badge badge-success">Normal</span></div>
+                    <div class="snapshot-content">
+                        <div class="snapshot-item">
+                            <div class="snapshot-title">Available Capacity:</div>
+                            <div class="snapshot-value">20,417 MW</div>
+                        </div>
+                        <div class="snapshot-item">
+                            <div class="snapshot-title">Forecasted Peak Demand:</div>
+                            <div class="snapshot-value">16,000 MW</div>
+                        </div>
+                        <div class="snapshot-item">
+                            <div class="snapshot-title">Surplus Capacity:</div>
+                            <div class="snapshot-value">2,136 MW</div>
+                        </div>
+                        <div class="snapshot-item">
+                            <div class="snapshot-title">Yesterday's Peak Demand:</div>
+                            <div class="snapshot-value">15,228 MW</div>
+                        </div>
+                        <div class="snapshot-item">
+                            <div class="snapshot-title">Status:</div>
+                            <div class="snapshot-value"><span class="badge badge-success">Normal</span></div>
+                        </div>
                     </div>
                 </div>
             </div>
