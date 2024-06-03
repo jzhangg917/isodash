@@ -68,12 +68,20 @@ body {
     background-color: #4299e1; /* Light blue for primary button */
     border-color: #4299e1;
     border-radius: 9999px; /* Full rounded corners */
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
 }
 
 .btn-secondary {
     background-color: #63b3ed; /* Lighter blue for secondary button */
     border-color: #63b3ed;
     border-radius: 9999px; /* Full rounded corners */
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
 }
 
 .btn-primary:hover, .btn-secondary:hover {
@@ -86,6 +94,10 @@ body {
     border-color: #4bc0c0;
     color: white;
     border-radius: 9999px; /* Full rounded corners */
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
 }
 
 .btn-info.active, .btn-info:active {
