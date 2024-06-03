@@ -4,26 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ISO Market Dashboard</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-<body>
-    <div class="container-fluid dashboard">
-        <header class="text-center my-4">
-            <h1 class="display-4 animate__animated animate__fadeInDown">ISO Market Dashboard</h1>
+<body class="bg-gray-800 text-white font-sans">
+    <div class="container mx-auto px-4">
+        <header class="text-center my-8">
+            <h1 class="text-4xl font-bold">ISO Market Dashboard</h1>
         </header>
-        <div class="row content">
-            <div class="col-md-4 price-map p-4 text-white rounded animate__animated animate__fadeIn">
-                <h2>Price Map</h2>
-                <div class="btn-group btn-group-toggle my-2" data-toggle="buttons">
-                    <label class="btn btn-info active">
-                        <input type="radio" name="options" id="realTime" autocomplete="off" checked> Real Time
-                    </label>
-                    <label class="btn btn-info">
-                        <input type="radio" name="options" id="dayAhead" autocomplete="off"> Day Ahead
-                    </label>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="price-map bg-gray-700 p-6 rounded-lg shadow-lg">
+                <h2 class="text-xl font-semibold mb-4">Price Map</h2>
+                <div class="flex justify-center mb-4">
+                    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                        <label class="btn btn-info active">
+                            <input type="radio" name="options" id="realTime" autocomplete="off" checked> Real Time
+                        </label>
+                        <label class="btn btn-info">
+                            <input type="radio" name="options" id="dayAhead" autocomplete="off"> Day Ahead
+                        </label>
+                    </div>
                 </div>
                 <div id="map">
                     <!-- Simple SVG Placeholder -->
@@ -35,8 +36,8 @@
                     </svg>
                 </div>
             </div>
-            <div class="col-md-4 resource-mix p-4 text-white rounded animate__animated animate__fadeIn">
-                <h2>Resource Mix</h2>
+            <div class="resource-mix bg-gray-700 p-6 rounded-lg shadow-lg">
+                <h2 class="text-xl font-semibold mb-4">Resource Mix</h2>
                 <div class="chart-container mb-4">
                     <canvas id="resourceChart"></canvas>
                 </div>
@@ -44,29 +45,29 @@
                     <canvas id="renewableChart"></canvas>
                 </div>
             </div>
-            <div class="col-md-4 system-demand p-4 text-white rounded animate__animated animate__fadeIn">
-                <h2>System Demand</h2>
+            <div class="system-demand bg-gray-700 p-6 rounded-lg shadow-lg">
+                <h2 class="text-xl font-semibold mb-4">System Demand</h2>
                 <canvas id="demandChart"></canvas>
-                <div class="snapshot mt-4 p-3 text-white rounded">
-                    <h2 class="text-center">Today's Snapshot</h2>
-                    <div class="snapshot-content">
-                        <div class="snapshot-item">
+                <div class="snapshot mt-4 p-3 bg-gray-800 rounded-lg shadow-inner">
+                    <h2 class="text-center text-lg font-semibold mb-2">Today's Snapshot</h2>
+                    <div class="snapshot-content grid grid-cols-1 gap-2 text-sm">
+                        <div class="snapshot-item flex justify-between bg-gray-900 p-2 rounded-md">
                             <div class="snapshot-title">Available Capacity:</div>
                             <div class="snapshot-value">20,417 MW</div>
                         </div>
-                        <div class="snapshot-item">
+                        <div class="snapshot-item flex justify-between bg-gray-900 p-2 rounded-md">
                             <div class="snapshot-title">Forecasted Peak Demand:</div>
                             <div class="snapshot-value">16,000 MW</div>
                         </div>
-                        <div class="snapshot-item">
+                        <div class="snapshot-item flex justify-between bg-gray-900 p-2 rounded-md">
                             <div class="snapshot-title">Surplus Capacity:</div>
                             <div class="snapshot-value">2,136 MW</div>
                         </div>
-                        <div class="snapshot-item">
+                        <div class="snapshot-item flex justify-between bg-gray-900 p-2 rounded-md">
                             <div class="snapshot-title">Yesterday's Peak Demand:</div>
                             <div class="snapshot-value">15,228 MW</div>
                         </div>
-                        <div class="snapshot-item">
+                        <div class="snapshot-item flex justify-between bg-gray-900 p-2 rounded-md">
                             <div class="snapshot-title">Status:</div>
                             <div class="snapshot-value"><span class="badge badge-success">Normal</span></div>
                         </div>
@@ -74,11 +75,9 @@
                 </div>
             </div>
         </div>
-        <div class="row content">
-            <div class="col-12 mb-4 text-center">
-                <button class="btn btn-primary mr-2">More Real-Time Data</button>
-                <button class="btn btn-secondary">Morning Report</button>
-            </div>
+        <div class="mt-8 text-center">
+            <button class="btn btn-primary mr-2">More Real-Time Data</button>
+            <button class="btn btn-secondary">Morning Report</button>
         </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
