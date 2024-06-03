@@ -54,3 +54,25 @@ body {
     background-color: #2b6cb0; /* Darker blue for hover state */
     border-color: #2b6cb0;
 }
+
+/* Style for Real Time and Day Ahead buttons */
+.btn-info {
+    background-color: #4bc0c0; /* Teal color */
+    border-color: #4bc0c0;
+    color: white;
+}
+
+.btn-info.active, .btn-info:active {
+    background-color: #36a2eb; /* Light blue when active */
+    border-color: #36a2eb;
+}
+
+.price-map {
+    text-align: center;
+}
+
+.price-map .btn-group {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
