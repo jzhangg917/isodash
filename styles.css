@@ -1,5 +1,5 @@
 body {
-    background-color: #1f2937; /* Updated to a darker, more aesthetic background color */
+    background-color: #1f2937; /* Dark background color */
     color: white;
     font-family: Arial, sans-serif;
 }
@@ -15,7 +15,7 @@ body {
 }
 
 .snapshot {
-    background-color: #2d3748;
+    background-color: #2d3748; /* Slightly lighter dark color for contrast */
     color: white;
     padding: 1rem;
     border-radius: 8px;
@@ -41,16 +41,16 @@ body {
 }
 
 .btn-primary {
-    background-color: #4299e1;
+    background-color: #4299e1; /* Light blue for primary button */
     border-color: #4299e1;
 }
 
 .btn-secondary {
-    background-color: #a0aec0;
-    border-color: #a0aec0;
+    background-color: #63b3ed; /* Lighter blue for secondary button */
+    border-color: #63b3ed;
 }
 
 .btn-primary:hover, .btn-secondary:hover {
-    background-color: #2b6cb0;
+    background-color: #2b6cb0; /* Darker blue for hover state */
     border-color: #2b6cb0;
 }
