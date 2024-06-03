@@ -3,12 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const renewableCtx = document.getElementById('renewableChart').getContext('2d');
     const demandCtx = document.getElementById('demandChart').getContext('2d');
 
-    // Function to create high-resolution charts with customized options
     const createChart = (ctx, type, data, options) => {
-        const dpi = window.devicePixelRatio || 1;
-        ctx.canvas.width = ctx.canvas.clientWidth * dpi;
-        ctx.canvas.height = ctx.canvas.clientHeight * dpi;
-        ctx.scale(dpi, dpi);
         return new Chart(ctx, {
             type: type,
             data: data,
@@ -22,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 display: true,
                 position: 'bottom',
                 labels: {
-                    color: 'white' // Change legend text color to white
+                    color: 'white'
                 }
             },
             tooltip: {
@@ -30,7 +25,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 titleColor: 'white',
                 bodyColor: 'white'
             }
-        }
+        },
+        maintainAspectRatio: true // Ensure aspect ratio is maintained
     };
 
     const defaultOptions = {
@@ -39,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 display: true,
                 position: 'bottom',
                 labels: {
-                    color: 'white' // Change legend text color to white
+                    color: 'white'
                 }
             },
             tooltip: {
@@ -51,15 +47,18 @@ document.addEventListener('DOMContentLoaded', () => {
         scales: {
             x: {
                 ticks: {
-                    color: 'white' // Change x-axis tick color to white
+                    color: 'white'
                 }
             },
             y: {
                 ticks: {
-                    color: 'white' // Change y-axis tick color to white
+                    color: 'white',
+                    beginAtZero: true, // Ensure y-axis starts at zero
+                    max: 15000, // Set a reasonable max value
                 }
             }
-        }
+        },
+        maintainAspectRatio: true // Ensure aspect ratio is maintained
     };
 
     const resourceChart = createChart(resourceCtx, 'doughnut', {

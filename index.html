@@ -4,62 +4,69 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ISO Market Dashboard</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <div class="dashboard">
-        <header>
-            <h1>ISO Market Dashboard</h1>
+    <div class="container-fluid dashboard">
+        <header class="text-center my-4">
+            <h1 class="display-4 animate__animated animate__fadeInDown">Reliable Electricity. Competitive Prices. Clean-Energy Transition.</h1>
         </header>
-        <div class="content">
-            <div class="snapshot">
-                <h2>Today's Snapshot</h2>
-                <div class="snapshot-data">
+        <div class="row content">
+            <div class="col-12 snapshot mb-4 p-4 bg-dark text-white rounded animate__animated animate__fadeIn">
+                <h2 class="text-center">Today's Snapshot</h2>
+                <div class="d-flex justify-content-around flex-wrap">
                     <div>Available Capacity: <span id="availableCapacity">20,417 MW</span></div>
                     <div>Forecasted Peak Demand: <span id="forecastedDemand">16,000 MW</span></div>
                     <div>Surplus Capacity: <span id="surplusCapacity">2,136 MW</span></div>
                     <div>Yesterday's Peak Demand: <span id="peakDemand">15,228 MW</span></div>
-                    <div>Status: <span class="status">Normal</span></div>
+                    <div>Status: <span class="badge badge-success">Normal</span></div>
                 </div>
             </div>
-            <div class="footer-buttons">
-                <button class="data-button">More Real-Time Data</button>
-                <button class="report-button">Morning Report</button>
+            <div class="col-12 mb-4 text-center">
+                <button class="btn btn-primary mr-2">More Real-Time Data</button>
+                <button class="btn btn-secondary">Morning Report</button>
             </div>
-            <div class="dashboard-content">
-                <div class="price-map">
-                    <h2>Price Map</h2>
-                    <div class="time-buttons">
-                        <button class="time-button active">Real Time</button>
-                        <button class="time-button">Day Ahead</button>
-                    </div>
-                    <div id="map">
-                        <!-- Simple SVG Placeholder -->
-                        <svg width="100%" height="150">
-                            <rect width="100%" height="100%" fill="#4bc0c0" />
-                            <text x="50%" y="50%" fill="white" font-size="24" text-anchor="middle" alignment-baseline="middle">
-                                Map Placeholder
-                            </text>
-                        </svg>
-                    </div>
+            <div class="col-md-4 price-map p-4 bg-dark text-white rounded animate__animated animate__fadeIn">
+                <h2>Price Map</h2>
+                <div class="btn-group btn-group-toggle my-2" data-toggle="buttons">
+                    <label class="btn btn-info active">
+                        <input type="radio" name="options" id="realTime" autocomplete="off" checked> Real Time
+                    </label>
+                    <label class="btn btn-info">
+                        <input type="radio" name="options" id="dayAhead" autocomplete="off"> Day Ahead
+                    </label>
                 </div>
-                <div class="resource-mix">
-                    <h2>Resource Mix</h2>
-                    <div class="chart-container">
-                        <canvas id="resourceChart"></canvas>
-                    </div>
-                    <div class="chart-container">
-                        <canvas id="renewableChart"></canvas>
-                    </div>
+                <div id="map">
+                    <!-- Simple SVG Placeholder -->
+                    <svg width="100%" height="150">
+                        <rect width="100%" height="100%" fill="#4bc0c0" />
+                        <text x="50%" y="50%" fill="white" font-size="24" text-anchor="middle" alignment-baseline="middle">
+                            Map Placeholder
+                        </text>
+                    </svg>
                 </div>
-                <div class="system-demand">
-                    <h2>System Demand</h2>
-                    <canvas id="demandChart"></canvas>
+            </div>
+            <div class="col-md-4 resource-mix p-4 bg-dark text-white rounded animate__animated animate__fadeIn">
+                <h2>Resource Mix</h2>
+                <div class="chart-container mb-4">
+                    <canvas id="resourceChart"></canvas>
                 </div>
+                <div class="chart-container">
+                    <canvas id="renewableChart"></canvas>
+                </div>
+            </div>
+            <div class="col-md-4 system-demand p-4 bg-dark text-white rounded animate__animated animate__fadeIn">
+                <h2>System Demand</h2>
+                <canvas id="demandChart"></canvas>
             </div>
         </div>
     </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
