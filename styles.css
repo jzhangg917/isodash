@@ -17,7 +17,7 @@ body {
 .snapshot {
     background-color: #2d3748; /* Slightly lighter dark color for contrast */
     color: white;
-    padding: 1rem;
+    padding: 0.5rem; /* Reduce padding for a more compact look */
     border-radius: 8px;
 }
 

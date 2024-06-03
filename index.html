@@ -15,20 +15,6 @@
             <h1 class="display-4 animate__animated animate__fadeInDown">ISO Market Dashboard</h1>
         </header>
         <div class="row content">
-            <div class="col-12 snapshot mb-4 p-4 text-white rounded animate__animated animate__fadeIn">
-                <h2 class="text-center">Today's Snapshot</h2>
-                <div class="d-flex justify-content-around flex-wrap">
-                    <div>Available Capacity: <span id="availableCapacity">20,417 MW</span></div>
-                    <div>Forecasted Peak Demand: <span id="forecastedDemand">16,000 MW</span></div>
-                    <div>Surplus Capacity: <span id="surplusCapacity">2,136 MW</span></div>
-                    <div>Yesterday's Peak Demand: <span id="peakDemand">15,228 MW</span></div>
-                    <div>Status: <span class="badge badge-success">Normal</span></div>
-                </div>
-            </div>
-            <div class="col-12 mb-4 text-center">
-                <button class="btn btn-primary mr-2">More Real-Time Data</button>
-                <button class="btn btn-secondary">Morning Report</button>
-            </div>
             <div class="col-md-4 price-map p-4 text-white rounded animate__animated animate__fadeIn">
                 <h2>Price Map</h2>
                 <div class="btn-group btn-group-toggle my-2" data-toggle="buttons">
@@ -61,6 +47,22 @@
             <div class="col-md-4 system-demand p-4 text-white rounded animate__animated animate__fadeIn">
                 <h2>System Demand</h2>
                 <canvas id="demandChart"></canvas>
+                <div class="snapshot mt-4 p-2 text-white rounded">
+                    <h2 class="text-center">Today's Snapshot</h2>
+                    <div class="d-flex justify-content-around flex-wrap">
+                        <div>Available Capacity: <span id="availableCapacity">20,417 MW</span></div>
+                        <div>Forecasted Peak Demand: <span id="forecastedDemand">16,000 MW</span></div>
+                        <div>Surplus Capacity: <span id="surplusCapacity">2,136 MW</span></div>
+                        <div>Yesterday's Peak Demand: <span id="peakDemand">15,228 MW</span></div>
+                        <div>Status: <span class="badge badge-success">Normal</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row content">
+            <div class="col-12 mb-4 text-center">
+                <button class="btn btn-primary mr-2">More Real-Time Data</button>
+                <button class="btn btn-secondary">Morning Report</button>
             </div>
         </div>
     </div>
