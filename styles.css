@@ -23,7 +23,7 @@ body {
 
 .snapshot-content {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
     gap: 0.5rem;
     font-size: 0.9rem;
 }
@@ -67,11 +67,13 @@ body {
 .btn-primary {
     background-color: #4299e1; /* Light blue for primary button */
     border-color: #4299e1;
+    border-radius: 9999px; /* Full rounded corners */
 }
 
 .btn-secondary {
     background-color: #63b3ed; /* Lighter blue for secondary button */
     border-color: #63b3ed;
+    border-radius: 9999px; /* Full rounded corners */
 }
 
 .btn-primary:hover, .btn-secondary:hover {
@@ -79,11 +81,11 @@ body {
     border-color: #2b6cb0;
 }
 
-/* Style for Real Time and Day Ahead buttons */
 .btn-info {
     background-color: #4bc0c0; /* Teal color */
     border-color: #4bc0c0;
     color: white;
+    border-radius: 9999px; /* Full rounded corners */
 }
 
 .btn-info.active, .btn-info:active {
@@ -99,4 +101,8 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+#map {
+    border-radius: 9999px; /* Full rounded corners for the map */
 }

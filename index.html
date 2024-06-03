@@ -19,14 +19,14 @@
                 <h2 class="text-xl font-semibold mb-4">Price Map</h2>
                 <div class="flex justify-center mb-4">
                     <div class="flex space-x-4">
-                        <button class="btn-info px-4 py-2 rounded" :class="{'bg-blue-500': currentTab === 'realtime', 'bg-teal-500': currentTab !== 'realtime'}" @click="currentTab = 'realtime'">Real Time</button>
-                        <button class="btn-info px-4 py-2 rounded" :class="{'bg-blue-500': currentTab === 'dayahead', 'bg-teal-500': currentTab !== 'dayahead'}" @click="currentTab = 'dayahead'">Day Ahead</button>
+                        <button class="btn-info px-4 py-2 rounded-full" :class="{'bg-blue-500': currentTab === 'realtime', 'bg-teal-500': currentTab !== 'realtime'}" @click="currentTab = 'realtime'">Real Time</button>
+                        <button class="btn-info px-4 py-2 rounded-full" :class="{'bg-blue-500': currentTab === 'dayahead', 'bg-teal-500': currentTab !== 'dayahead'}" @click="currentTab = 'dayahead'">Day Ahead</button>
                     </div>
                 </div>
-                <div id="map">
+                <div id="map" class="rounded-lg">
                     <!-- Simple SVG Placeholder -->
-                    <svg width="100%" height="150">
-                        <rect width="100%" height="100%" fill="#4bc0c0" />
+                    <svg width="100%" height="150" class="rounded-lg">
+                        <rect width="100%" height="100%" fill="#4bc0c0" class="rounded-lg" />
                         <text x="50%" y="50%" fill="white" font-size="24" text-anchor="middle" alignment-baseline="middle">
                             Map Placeholder
                         </text>
@@ -73,8 +73,8 @@
             </div>
         </div>
         <div class="mt-8 text-center">
-            <button class="btn btn-primary mr-2">More Real-Time Data</button>
-            <button class="btn btn-secondary">Morning Report</button>
+            <button class="btn btn-primary mr-2 rounded-full">More Real-Time Data</button>
+            <button class="btn btn-secondary rounded-full">Morning Report</button>
         </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
