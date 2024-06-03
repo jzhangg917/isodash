@@ -90,8 +90,8 @@ body {
 }
 
 .btn-info {
-    background-color: #4bc0c0; /* Teal color */
-    border-color: #4bc0c0;
+    background-color: #5a67d8; /* Indigo color for contrast */
+    border-color: #5a67d8;
     color: white;
     border-radius: 9999px; /* Full rounded corners */
     padding-left: 1rem;
@@ -101,8 +101,8 @@ body {
 }
 
 .btn-info.active, .btn-info:active {
-    background-color: #36a2eb; /* Light blue when active */
-    border-color: #36a2eb;
+    background-color: #4c51bf; /* Darker indigo when active */
+    border-color: #4c51bf;
 }
 
 .price-map {

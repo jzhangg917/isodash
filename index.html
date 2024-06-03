@@ -19,8 +19,8 @@
                 <h2 class="text-xl font-semibold mb-4">Price Map</h2>
                 <div class="flex justify-center mb-4">
                     <div class="flex space-x-4">
-                        <button class="btn-info px-4 py-2 rounded-full" :class="{'bg-blue-500': currentTab === 'realtime', 'bg-teal-500': currentTab !== 'realtime'}" @click="currentTab = 'realtime'">Real Time</button>
-                        <button class="btn-info px-4 py-2 rounded-full" :class="{'bg-blue-500': currentTab === 'dayahead', 'bg-teal-500': currentTab !== 'dayahead'}" @click="currentTab = 'dayahead'">Day Ahead</button>
+                        <button class="btn-info px-4 py-2 rounded-full" :class="{'bg-blue-500': currentTab === 'realtime', 'bg-indigo-500': currentTab !== 'realtime'}" @click="currentTab = 'realtime'">Real Time</button>
+                        <button class="btn-info px-4 py-2 rounded-full" :class="{'bg-blue-500': currentTab === 'dayahead', 'bg-indigo-500': currentTab !== 'dayahead'}" @click="currentTab = 'dayahead'">Day Ahead</button>
                     </div>
                 </div>
                 <div id="map" class="rounded-lg">
