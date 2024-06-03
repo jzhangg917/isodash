@@ -117,4 +117,6 @@ body {
 
 #map {
     border-radius: 9999px; /* Full rounded corners for the map */
+    width: 100%; /* Stretch to fill the container */
+    height: 100%;
 }
