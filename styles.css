@@ -11,79 +11,47 @@ body {
 
 header {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
-}
-
-.mission-button {
-    background-color: #41b6e6;
-    border: none;
-    padding: 10px;
-    color: white;
-    cursor: pointer;
 }
 
 .content {
     display: flex;
-    justify-content: space-around;
+    flex-direction: column;
+    align-items: center;
     margin-top: 20px;
-}
-
-.price-map, .resource-mix, .system-demand {
-    background-color: #324a5f;
-    padding: 20px;
-    border-radius: 8px;
-    width: 30%;
-}
-
-.time-buttons {
-    display: flex;
-    justify-content: space-around;
-    margin-bottom: 20px;
-}
-
-.time-button {
-    background-color: #41b6e6;
-    border: none;
-    padding: 10px;
-    color: white;
-    cursor: pointer;
-    border-radius: 4px;
-}
-
-.time-button.active {
-    background-color: #3a92b1;
+    width: 100%;
 }
 
 .snapshot {
     background-color: #324a5f;
     padding: 20px;
     border-radius: 8px;
-    margin-top: 20px;
+    width: 100%;
+    max-width: 1200px;
+    margin-bottom: 20px;
 }
 
 .snapshot-data {
     display: flex;
-    justify-content: space-around;
-    margin-top: 20px;
-}
-
-.system-status {
-    margin-top: 20px;
-    display: flex;
-    justify-content: center;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
 }
 
 .status {
     background-color: #4caf50;
     padding: 5px 10px;
     border-radius: 4px;
+    margin-left: 5px;
 }
 
 .footer-buttons {
     display: flex;
-    justify-content: space-around;
-    margin-top: 20px;
+    justify-content: center;
+    width: 100%;
+    max-width: 1200px;
+    margin-bottom: 20px;
 }
 
 .data-button, .report-button {
@@ -93,4 +61,83 @@ header {
     color: white;
     cursor: pointer;
     border-radius: 4px;
+    margin: 0 10px;
+}
+
+.dashboard-content {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 1200px;
+}
+
+.price-map, .resource-mix, .system-demand {
+    background-color: #324a5f;
+    padding: 20px;
+    border-radius: 8px;
+    width: 32%;
+    margin-bottom: 20px;
+}
+
+.price-map svg {
+    width: 100%;
+    height: 150px;
+}
+
+.time-buttons {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 10px;
+}
+
+.time-button {
+    background-color: #41b6e6;
+    border: none;
+    padding: 5px;
+    color: white;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.time-button.active {
+    background-color: #3a92b1;
+}
+
+.chart-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 300px;
+}
+
+.chart-container canvas {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+@media (max-width: 768px) {
+    .content {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .snapshot-data {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .footer-buttons {
+        width: 90%;
+    }
+
+    .dashboard-content {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .price-map, .resource-mix, .system-demand {
+        width: 90%;
+        margin-bottom: 20px;
+    }
 }

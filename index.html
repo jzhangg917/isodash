@@ -11,40 +11,53 @@
     <div class="dashboard">
         <header>
             <h1>Reliable Electricity. Competitive Prices. Clean-Energy Transition.</h1>
-            <button class="mission-button">Our Mission</button>
         </header>
         <div class="content">
-            <div class="price-map">
-                <h2>Price Map</h2>
-                <div class="time-buttons">
-                    <button class="time-button active">Real Time</button>
-                    <button class="time-button">Day Ahead</button>
+            <div class="snapshot">
+                <h2>Today's Snapshot</h2>
+                <div class="snapshot-data">
+                    <div>Available Capacity: <span id="availableCapacity">20,417 MW</span></div>
+                    <div>Forecasted Peak Demand: <span id="forecastedDemand">16,000 MW</span></div>
+                    <div>Surplus Capacity: <span id="surplusCapacity">2,136 MW</span></div>
+                    <div>Yesterday's Peak Demand: <span id="peakDemand">15,228 MW</span></div>
+                    <div>Status: <span class="status">Normal</span></div>
                 </div>
-                <div id="map"></div>
             </div>
-            <div class="resource-mix">
-                <h2>Resource Mix</h2>
-                <canvas id="resourceChart"></canvas>
-                <canvas id="renewableChart"></canvas>
+            <div class="footer-buttons">
+                <button class="data-button">More Real-Time Data</button>
+                <button class="report-button">Morning Report</button>
             </div>
-            <div class="system-demand">
-                <h2>System Demand</h2>
-                <canvas id="demandChart"></canvas>
+            <div class="dashboard-content">
+                <div class="price-map">
+                    <h2>Price Map</h2>
+                    <div class="time-buttons">
+                        <button class="time-button active">Real Time</button>
+                        <button class="time-button">Day Ahead</button>
+                    </div>
+                    <div id="map">
+                        <!-- Simple SVG Placeholder -->
+                        <svg width="100%" height="150">
+                            <rect width="100%" height="100%" fill="#4bc0c0" />
+                            <text x="50%" y="50%" fill="white" font-size="24" text-anchor="middle" alignment-baseline="middle">
+                                Map Placeholder
+                            </text>
+                        </svg>
+                    </div>
+                </div>
+                <div class="resource-mix">
+                    <h2>Resource Mix</h2>
+                    <div class="chart-container">
+                        <canvas id="resourceChart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="renewableChart"></canvas>
+                    </div>
+                </div>
+                <div class="system-demand">
+                    <h2>System Demand</h2>
+                    <canvas id="demandChart"></canvas>
+                </div>
             </div>
-        </div>
-        <div class="snapshot">
-            <h2>Today's Snapshot</h2>
-            <div class="snapshot-data">
-                <div>Available Capacity: <span id="availableCapacity">20,417 MW</span></div>
-                <div>Forecasted Peak Demand: <span id="forecastedDemand">16,000 MW</span></div>
-                <div>Surplus Capacity: <span id="surplusCapacity">2,136 MW</span></div>
-                <div>Yesterday's Peak Demand: <span id="peakDemand">15,228 MW</span></div>
-                <div>Status: <span class="status">Normal</span></div>
-            </div>
-        </div>
-        <div class="footer-buttons">
-            <button class="data-button">More Real-Time Data</button>
-            <button class="report-button">Morning Report</button>
         </div>
     </div>
     <script src="script.js"></script>
