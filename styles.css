@@ -1,0 +1,96 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #2b3e50;
+    color: white;
+}
+
+.dashboard {
+    padding: 20px;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.mission-button {
+    background-color: #41b6e6;
+    border: none;
+    padding: 10px;
+    color: white;
+    cursor: pointer;
+}
+
+.content {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+}
+
+.price-map, .resource-mix, .system-demand {
+    background-color: #324a5f;
+    padding: 20px;
+    border-radius: 8px;
+    width: 30%;
+}
+
+.time-buttons {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+
+.time-button {
+    background-color: #41b6e6;
+    border: none;
+    padding: 10px;
+    color: white;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.time-button.active {
+    background-color: #3a92b1;
+}
+
+.snapshot {
+    background-color: #324a5f;
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 20px;
+}
+
+.snapshot-data {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+}
+
+.system-status {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.status {
+    background-color: #4caf50;
+    padding: 5px 10px;
+    border-radius: 4px;
+}
+
+.footer-buttons {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+}
+
+.data-button, .report-button {
+    background-color: #41b6e6;
+    border: none;
+    padding: 10px;
+    color: white;
+    cursor: pointer;
+    border-radius: 4px;
+}
