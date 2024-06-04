@@ -14,11 +14,19 @@
             height: auto;
             border-radius: 10px; 
         }
+        .logo {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 300px; 
+            height: auto; 
+        }
     </style>
 </head>
 <body class="bg-gray-800 text-white font-sans">
-    <div class="container mx-auto px-4">
-        <header class="text-center my-8">
+    <div class="container mx-auto px-1">
+        <header class="text-center my-8 relative">
+            <img src="KoreLogo.png" alt="Kore Logo" class="logo">
             <h1 class="text-4xl font-bold">ISO Market Dashboard</h1>
         </header>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -75,7 +83,7 @@
             </div>
         </div>
         <div class="mt-8 text-center">
-            <button class="btn btn-primary mr-2 rounded-full">More Real-Time Data</button>
+            <button class="btn btn-primary mr-4 rounded-full">More Real-Time Data</button>
             <button class="btn btn-secondary rounded-full">Morning Report</button>
         </div>
     </div>
