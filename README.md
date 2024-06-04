@@ -68,4 +68,8 @@ The ISO Market Dashboard is a web-based application designed to provide a compre
 4. **Testing and Deployment**
    - Conduct thorough testing and deploy the application to a live server.
 
+## 6/3/2024
 <img width="1470" alt="image" src="https://github.com/jzhangg917/isodash/assets/94925733/48201a90-d804-49ec-8e66-0bc8d63e0a48">
+
+## 6/4/2024
+![image](https://github.com/jzhangg917/isodash/assets/94925733/37c4610b-48da-4329-b012-f1ec87c3ae6e)
