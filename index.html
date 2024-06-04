@@ -57,6 +57,7 @@
                 <canvas id="demandChart"></canvas>
                 <div class="snapshot mt-4 p-3 w-full bg-gray-800 rounded-lg shadow-inner">
                     <h2 class="text-center text-lg font-semibold mb-2">Today's Snapshot</h2>
+                    <p id="currentDateTime" class="text-center text-lg font-semibold mb-2"></p>
                     <div class="snapshot-content grid grid-cols-2 gap-2 text-sm">
                         <div class="snapshot-item flex justify-between bg-gray-900 p-2 rounded-md">
                             <div class="snapshot-title">Available Capacity:</div>
@@ -91,5 +92,19 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="script.js"></script>
+    <script>
+        // Function to update date and time
+        function updateDateTime() {
+            const now = new Date();
+            const dateTimeString = now.toLocaleString();
+            document.getElementById('currentDateTime').textContent = dateTimeString;
+        }
+
+        // Initial call to update date and time
+        updateDateTime();
+
+        // Set interval to update date and time every second (1000 milliseconds)
+        setInterval(updateDateTime, 1000);
+    </script>
 </body>
 </html>
