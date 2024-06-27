@@ -1,32 +1,18 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const resourceCtx = document.getElementById('resourceChart').getContext('2d');
-    const renewableCtx = document.getElementById('renewableChart').getContext('2d');
-    const demandCtx = document.getElementById('demandChart').getContext('2d');
+    let renewableChartInstance = null;
+    let demandChartInstance = null;
 
     const createChart = (ctx, type, data, options) => {
-        return new Chart(ctx, {
+        if (ctx.chart) {
+            ctx.chart.destroy();
+        }
+        const chart = new Chart(ctx, {
             type: type,
             data: data,
             options: options
         });
-    };
-
-    const resourceOptions = {
-        plugins: {
-            legend: {
-                display: true,
-                position: 'bottom',
-                labels: {
-                    color: 'white'
-                }
-            },
-            tooltip: {
-                enabled: true,
-                titleColor: 'white',
-                bodyColor: 'white'
-            }
-        },
-        maintainAspectRatio: true // Ensure aspect ratio is maintained
+        ctx.chart = chart;
+        return chart;
     };
 
     const defaultOptions = {
@@ -61,42 +47,97 @@ document.addEventListener('DOMContentLoaded', () => {
         maintainAspectRatio: true // Ensure aspect ratio is maintained
     };
 
-    const resourceChart = createChart(resourceCtx, 'doughnut', {
-        labels: ['Natural Gas', 'Nuclear', 'Renewables', 'Hydro', 'Other'],
-        datasets: [{
-            data: [59, 27, 10, 4, 1],
-            backgroundColor: ['#36a2eb', '#ff6384', '#ffcd56', '#4bc0c0', '#9966ff']
-        }]
-    }, resourceOptions);
+    const fetchData = async () => {
+        try {
+            const response = await fetch('http://nri128:65/snowflake/data/get_fuel_mix.php?ISO=ISNE&start=2024-06-11%2014:00:00&end=2024-06-12%2014:05:00');
+            const data = await response.json();
+            console.log('Fetched Data:', data);  // Log fetched data to console
+            processData(data);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    };
 
-    const renewableChart = createChart(renewableCtx, 'doughnut', {
-        labels: ['Solar', 'Refuse', 'Wood', 'Wind', 'Landfill Gas'],
-        datasets: [{
-            data: [56, 24, 15, 2, 2],
-            backgroundColor: ['#ffcd56', '#ff9f40', '#ff6384', '#36a2eb', '#9966ff']
-        }]
-    }, resourceOptions);
+    const processData = (data) => {
+        const timestamps = [];
+        const solarData = [];
+        const windData = [];
+        const refuseData = [];
+        const woodData = [];
+        const oilData = [];
+        const nuclearData = [];
+        const totalGenData = [];
+        const naturalGasData = [];
+        const landfillGasData = [];
+        const hydroData = [];
+        const coalData = [];
 
-    const demandChart = createChart(demandCtx, 'line', {
-        labels: ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00'],
-        datasets: [{
-            label: 'Forecasted (MW)',
-            data: [12460, 12500, 13000, 14000, 13500, 12500],
-            borderColor: '#36a2eb',
-            fill: false
-        }, {
-            label: 'Actual (MW)',
-            data: [11981, 12000, 12800, 13800, 13200, 12000],
-            borderColor: '#ffcd56',
-            fill: false
-        }]
-    }, defaultOptions);
-
-    document.querySelectorAll('.time-button').forEach(button => {
-        button.addEventListener('click', (event) => {
-            document.querySelectorAll('.time-button').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
-            // Update the charts and data here based on the selected time frame
+        data.forEach(item => {
+            const time = item.timestamp.split(' ')[1];
+            timestamps.push(time);
+            console.log('Processing Item:', item.shortname, item.value);  // Log each item to console
+            switch(item.shortname) {
+                case 'Actual Solar Gen-NEISO':
+                    solarData.push(item.value);
+                    break;
+                case 'RT Wind (10 Min) Gen - NEISO':
+                    windData.push(item.value);
+                    break;
+                case 'NEISO_REFUSE_GENMW':
+                    refuseData.push(item.value);
+                    break;
+                case 'NEISO_WOOD_GENMW':
+                    woodData.push(item.value);
+                    break;
+                case 'NEISO_OIL_GENMW':
+                    oilData.push(item.value);
+                    break;
+                case 'NEISO_NUCLEAR_GENMW':
+                    nuclearData.push(item.value);
+                    break;
+                case 'NEISO_TOTAL_GENMW':
+                    totalGenData.push(item.value);
+                    break;
+                case 'NEISO_NATURAL_GAS_GENMW':
+                    naturalGasData.push(item.value);
+                    break;
+                case 'NEISO_LANDFILL_GAS_GENMW':
+                    landfillGasData.push(item.value);
+                    break;
+                case 'NEISO_HYDRO_GENMW':
+                    hydroData.push(item.value);
+                    break;
+                case 'NEISO_COAL_GENMW':
+                    coalData.push(item.value);
+                    break;
+            }
         });
-    });
+
+        updateCharts(timestamps, solarData, windData, refuseData, woodData, landfillGasData);
+    };
+
+    const updateCharts = (timestamps, solarData, windData, refuseData, woodData, landfillGasData) => {
+        const renewableCtx = document.getElementById('renewableChart').getContext('2d');
+        const demandCtx = document.getElementById('demandChart').getContext('2d');
+
+        renewableChartInstance = createChart(renewableCtx, 'doughnut', {
+            labels: ['Solar', 'Refuse', 'Wood', 'Wind', 'Landfill Gas'],
+            datasets: [{
+                data: [solarData[solarData.length - 1], refuseData[refuseData.length - 1], woodData[woodData.length - 1], windData[windData.length - 1], landfillGasData[landfillGasData.length - 1]],
+                backgroundColor: ['#ffcd56', '#ff9f40', '#ff6384', '#36a2eb', '#9966ff']
+            }]
+        }, defaultOptions);
+
+        demandChartInstance = createChart(demandCtx, 'line', {
+            labels: timestamps,
+            datasets: [{
+                label: 'Total Generation (MW)',
+                data: solarData,
+                borderColor: '#36a2eb',
+                fill: false
+            }]
+        }, defaultOptions);
+    };
+
+    fetchData();
 });
