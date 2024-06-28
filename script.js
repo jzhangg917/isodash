@@ -128,15 +128,49 @@ document.addEventListener('DOMContentLoaded', () => {
             }]
         }, defaultOptions);
 
-        demandChartInstance = createChart(demandCtx, 'line', {
-            labels: timestamps,
-            datasets: [{
-                label: 'Total Generation (MW)',
-                data: solarData,
-                borderColor: '#36a2eb',
-                fill: false
-            }]
-        }, defaultOptions);
+        fetchLoadData().then(loadData => {
+            demandChartInstance = createChart(demandCtx, 'line', {
+                labels: timestamps,
+                datasets: [{
+                    label: 'Real-Time Load (MW)',
+                    data: loadData.rtLoadData,
+                    borderColor: '#36a2eb',
+                    fill: false
+                }, {
+                    label: 'Day-Ahead Load (MW)',
+                    data: loadData.daLoadData,
+                    borderColor: '#ffcd56',
+                    fill: false
+                }]
+            }, defaultOptions);
+        });
+    };
+
+    const fetchLoadData = async () => {
+        try {
+            const response = await fetch('http://nri128:65/snowflake/data/get_rt_da_load.php?ISO=ISNE&start=2024-06-11%2000:00:00&end=2024-06-11%2014:05:00');
+            const data = await response.json();
+            console.log('Fetched Load Data:', data);  // Log fetched load data to console
+            return processLoadData(data);
+        } catch (error) {
+            console.error('Error fetching load data:', error);
+            return { rtLoadData: [], daLoadData: [] };
+        }
+    };
+
+    const processLoadData = (data) => {
+        const timestamps = [];
+        const rtLoadData = [];
+        const daLoadData = [];
+
+        data.forEach(item => {
+            const time = item.timestamp.split(' ')[1];
+            timestamps.push(time);
+            rtLoadData.push(item.rt_load);
+            daLoadData.push(item.da_load);
+        });
+
+        return { rtLoadData, daLoadData };
     };
 
     fetchData();

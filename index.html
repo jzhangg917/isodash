@@ -27,7 +27,7 @@
     <div class="container mx-auto px-1">
         <header class="text-center my-8 relative">
             <img src="KoreLogo.png" alt="Kore Logo" class="logo">
-            <h1 class="text-4xl font-bold">ISO Market Dashboard</h1>
+            <h1 class="text-4xl font-bold">Ercot ISO Market Dashboard</h1>
         </header>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div class="price-map bg-gray-700 p-6 rounded-lg shadow-lg">
@@ -43,15 +43,6 @@
                     <img src="fillerimage.png" alt="Map Placeholder" class="map-placeholder">
                 </div>
             </div>
-            <!-- Remove or comment out the first resource mix chart section -->
-            <!--
-            <div class="resource-mix bg-gray-700 p-6 rounded-lg shadow-lg flex flex-col items-center">
-                <h2 class="text-xl font-semibold mb-4">Resource Mix</h2>
-                <div class="chart-container mb-4">
-                    <canvas id="resourceChart"></canvas>
-                </div>
-            </div>
-            -->
             <div class="resource-mix bg-gray-700 p-6 rounded-lg shadow-lg flex flex-col items-center">
                 <h2 class="text-xl font-semibold mb-4">Resource Mix</h2>
                 <div class="chart-container">
@@ -96,190 +87,220 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
-        let renewableCtx;
-        let demandCtx;
+        document.addEventListener('DOMContentLoaded', () => {
+            let renewableCtx;
+            let demandCtx;
 
-        let renewableChartInstance = null;
-        let demandChartInstance = null;
+            let renewableChartInstance = null;
+            let demandChartInstance = null;
 
-        const createChart = (ctx, type, data, options) => {
-            if (ctx.chart) {
-                ctx.chart.destroy();
-            }
-            const chart = new Chart(ctx, {
-                type: type,
-                data: data,
-                options: options
-            });
-            ctx.chart = chart;
-            return chart;
-        };
-
-        async function fetchData() {
-            try {
-                const response = await fetch('http://nri128:65/snowflake/data/get_fuel_mix.php?ISO=ISNE&start=2024-06-11%2014:00:00&end=2024-06-12%2014:05:00');
-                const data = await response.json();
-                console.log('Fetched Data:', data);  // Log fetched data to console
-                processData(data);
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
-        }
-
-        function processData(data) {
-            const timestamps = [];
-            const solarData = [];
-            const windData = [];
-            const refuseData = [];
-            const woodData = [];
-            const oilData = [];
-            const nuclearData = [];
-            const totalGenData = [];
-            const naturalGasData = [];
-            const landfillGasData = [];
-            const hydroData = [];
-            const coalData = [];
-
-            data.forEach(item => {
-                const time = item.timestamp.split(' ')[1];
-                timestamps.push(time);
-                console.log('Processing Item:', item.shortname, item.value);  // Log each item to console
-                switch(item.shortname) {
-                    case 'Actual Solar Gen-NEISO':
-                        solarData.push(item.value);
-                        break;
-                    case 'RT Wind (10 Min) Gen - NEISO':
-                        windData.push(item.value);
-                        break;
-                    case 'NEISO_REFUSE_GENMW':
-                        refuseData.push(item.value);
-                        break;
-                    case 'NEISO_WOOD_GENMW':
-                        woodData.push(item.value);
-                        break;
-                    case 'NEISO_OIL_GENMW':
-                        oilData.push(item.value);
-                        break;
-                    case 'NEISO_NUCLEAR_GENMW':
-                        nuclearData.push(item.value);
-                        break;
-                    case 'NEISO_TOTAL_GENMW':
-                        totalGenData.push(item.value);
-                        break;
-                    case 'NEISO_NATURAL_GAS_GENMW':
-                        naturalGasData.push(item.value);
-                        break;
-                    case 'NEISO_LANDFILL_GAS_GENMW':
-                        landfillGasData.push(item.value);
-                        break;
-                    case 'NEISO_HYDRO_GENMW':
-                        hydroData.push(item.value);
-                        break;
-                    case 'NEISO_COAL_GENMW':
-                        coalData.push(item.value);
-                        break;
+            const createChart = (ctx, type, data, options) => {
+                if (ctx.chart) {
+                    ctx.chart.destroy();
                 }
-            });
-
-            updateCharts(timestamps, solarData, windData, refuseData, woodData, landfillGasData);
-            updateSnapshot(totalGenData);
-        }
-
-        function updateCharts(timestamps, solarData, windData, refuseData, woodData, landfillGasData) {
-            renewableCtx = document.getElementById('renewableChart').getContext('2d');
-            demandCtx = document.getElementById('demandChart').getContext('2d');
-
-            const resourceOptions = {
-                plugins: {
-                    legend: {
-                        display: true,
-                        position: 'bottom',
-                        labels: {
-                            color: 'white'
-                        }
-                    },
-                    tooltip: {
-                        enabled: true,
-                        titleColor: 'white',
-                        bodyColor: 'white'
-                    }
-                },
-                maintainAspectRatio: true // Ensure aspect ratio is maintained
+                const chart = new Chart(ctx, {
+                    type: type,
+                    data: data,
+                    options: options
+                });
+                ctx.chart = chart;
+                return chart;
             };
 
-            const defaultOptions = {
-                plugins: {
-                    legend: {
-                        display: true,
-                        position: 'bottom',
-                        labels: {
-                            color: 'white'
+            async function fetchData() {
+                try {
+                    const fuelResponse = await fetch('http://nri128:65/snowflake/data/get_fuel_mix.php?ISO=ISNE&start=2024-06-11%2014:00:00&end=2024-06-12%2014:05:00');
+                    const fuelData = await fuelResponse.json();
+                    console.log('Fetched Fuel Data:', fuelData);  // Log fetched fuel data to console
+                    processFuelData(fuelData);
+
+                    const demandResponse = await fetch('http://nri128:65/snowflake/data/get_rt_da_load.php?ISO=ISNE&start=2024-06-11%2000:00:00&end=2024-06-11%2014:05:00');
+                    const demandData = await demandResponse.json();
+                    console.log('Fetched Demand Data:', demandData);  // Log fetched demand data to console
+                    processDemandData(demandData);
+                } catch (error) {
+                    console.error('Error fetching data:', error);
+                }
+            }
+
+            function processFuelData(data) {
+                const timestamps = [];
+                const solarData = [];
+                const windData = [];
+                const refuseData = [];
+                const woodData = [];
+                const oilData = [];
+                const nuclearData = [];
+                const totalGenData = [];
+                const naturalGasData = [];
+                const landfillGasData = [];
+                const hydroData = [];
+                const coalData = [];
+
+                data.forEach(item => {
+                    const time = item.timestamp.split(' ')[1];
+                    timestamps.push(time);
+                    console.log('Processing Item:', item.shortname, item.value);  // Log each item to console
+                    switch(item.shortname) {
+                        case 'Actual Solar Gen-NEISO':
+                            solarData.push(item.value);
+                            break;
+                        case 'RT Wind (10 Min) Gen - NEISO':
+                            windData.push(item.value);
+                            break;
+                        case 'NEISO_REFUSE_GENMW':
+                            refuseData.push(item.value);
+                            break;
+                        case 'NEISO_WOOD_GENMW':
+                            woodData.push(item.value);
+                            break;
+                        case 'NEISO_OIL_GENMW':
+                            oilData.push(item.value);
+                            break;
+                        case 'NEISO_NUCLEAR_GENMW':
+                            nuclearData.push(item.value);
+                            break;
+                        case 'NEISO_TOTAL_GENMW':
+                            totalGenData.push(item.value);
+                            break;
+                        case 'NEISO_NATURAL_GAS_GENMW':
+                            naturalGasData.push(item.value);
+                            break;
+                        case 'NEISO_LANDFILL_GAS_GENMW':
+                            landfillGasData.push(item.value);
+                            break;
+                        case 'NEISO_HYDRO_GENMW':
+                            hydroData.push(item.value);
+                            break;
+                        case 'NEISO_COAL_GENMW':
+                            coalData.push(item.value);
+                            break;
+                    }
+                });
+
+                updateRenewableChart(timestamps, solarData, windData, refuseData, woodData, landfillGasData);
+            }
+
+            function processDemandData(data) {
+                const timestamps = [];
+                const rtLoadData = [];
+                const daLoadData = [];
+
+                data.forEach(item => {
+                    const time = item.timestamp.split(' ')[1];
+                    timestamps.push(time);
+                    console.log('Processing Item:', item.rt_load, item.da_load);  // Log each item to console
+                    rtLoadData.push(item.rt_load);
+                    daLoadData.push(item.da_load);
+                });
+
+                updateDemandChart(timestamps, rtLoadData, daLoadData);
+            }
+
+            function updateRenewableChart(timestamps, solarData, windData, refuseData, woodData, landfillGasData) {
+                renewableCtx = document.getElementById('renewableChart').getContext('2d');
+
+                const resourceOptions = {
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'bottom',
+                            labels: {
+                                color: 'white'
+                            }
+                        },
+                        tooltip: {
+                            enabled: true,
+                            titleColor: 'white',
+                            bodyColor: 'white'
                         }
                     },
-                    tooltip: {
-                        enabled: true,
-                        titleColor: 'white',
-                        bodyColor: 'white'
-                    }
-                },
-                scales: {
-                    x: {
-                        ticks: {
-                            color: 'white'
+                    maintainAspectRatio: true // Ensure aspect ratio is maintained
+                };
+
+                renewableChartInstance = createChart(renewableCtx, 'doughnut', {
+                    labels: ['Solar', 'Refuse', 'Wood', 'Wind', 'Landfill Gas'],
+                    datasets: [{
+                        data: [solarData[solarData.length - 1], refuseData[refuseData.length - 1], woodData[woodData.length - 1], windData[windData.length - 1], landfillGasData[landfillGasData.length - 1]],
+                        backgroundColor: ['#ffcd56', '#ff9f40', '#ff6384', '#36a2eb', '#9966ff']
+                    }]
+                }, resourceOptions);
+            }
+
+            function updateDemandChart(timestamps, rtLoadData, daLoadData) {
+                demandCtx = document.getElementById('demandChart').getContext('2d');
+
+                const defaultOptions = {
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'bottom',
+                            labels: {
+                                color: 'white'
+                            }
+                        },
+                        tooltip: {
+                            enabled: true,
+                            titleColor: 'white',
+                            bodyColor: 'white'
                         }
                     },
-                    y: {
-                        ticks: {
-                            color: 'white',
-                            beginAtZero: true, // Ensure y-axis starts at zero
-                            max: 15000, // Set a reasonable max value
+                    scales: {
+                        x: {
+                            ticks: {
+                                color: 'white'
+                            }
+                        },
+                        y: {
+                            ticks: {
+                                color: 'white',
+                                beginAtZero: true, // Ensure y-axis starts at zero
+                                max: 15000, // Set a reasonable max value
+                            }
                         }
-                    }
-                },
-                maintainAspectRatio: true // Ensure aspect ratio is maintained
-            };
+                    },
+                    maintainAspectRatio: true // Ensure aspect ratio is maintained
+                };
 
-            renewableChartInstance = createChart(renewableCtx, 'doughnut', {
-                labels: ['Solar', 'Refuse', 'Wood', 'Wind', 'Landfill Gas'],
-                datasets: [{
-                    data: [solarData[solarData.length - 1], refuseData[refuseData.length - 1], woodData[woodData.length - 1], windData[windData.length - 1], landfillGasData[landfillGasData.length - 1]],
-                    backgroundColor: ['#ffcd56', '#ff9f40', '#ff6384', '#36a2eb', '#9966ff']
-                }]
-            }, resourceOptions);
+                demandChartInstance = createChart(demandCtx, 'line', {
+                    labels: timestamps,
+                    datasets: [{
+                        label: 'Real-Time Load (MW)',
+                        data: rtLoadData,
+                        borderColor: '#36a2eb',
+                        fill: false
+                    }, {
+                        label: 'Day-Ahead Load (MW)',
+                        data: daLoadData,
+                        borderColor: '#ffcd56',
+                        fill: false
+                    }]
+                }, defaultOptions);
+            }
 
-            demandChartInstance = createChart(demandCtx, 'line', {
-                labels: timestamps,
-                datasets: [{
-                    label: 'Total Generation (MW)',
-                    data: solarData,
-                    borderColor: '#36a2eb',
-                    fill: false
-                }]
-            }, defaultOptions);
-        }
+            function updateSnapshot(totalGenData) {
+                document.getElementById('availableCapacity').textContent = `${totalGenData[totalGenData.length - 1]} MW`;
+                document.getElementById('forecastedPeakDemand').textContent = '16,000 MW'; // Replace with actual data if available
+                document.getElementById('surplusCapacity').textContent = `${totalGenData[totalGenData.length - 1] - 16000} MW`; // Replace with actual data if available
+                document.getElementById('yesterdayPeakDemand').textContent = '15,228 MW'; // Replace with actual data if available
+            }
 
-        function updateSnapshot(totalGenData) {
-            document.getElementById('availableCapacity').textContent = `${totalGenData[totalGenData.length - 1]} MW`;
-            document.getElementById('forecastedPeakDemand').textContent = '16,000 MW'; // Replace with actual data if available
-            document.getElementById('surplusCapacity').textContent = `${totalGenData[totalGenData.length - 1] - 16000} MW`; // Replace with actual data if available
-            document.getElementById('yesterdayPeakDemand').textContent = '15,228 MW'; // Replace with actual data if available
-        }
+            // Function to update date and time
+            function updateDateTime() {
+                const now = new Date();
+                const dateTimeString = now.toLocaleString();
+                document.getElementById('currentDateTime').textContent = dateTimeString;
+            }
 
-        // Function to update date and time
-        function updateDateTime() {
-            const now = new Date();
-            const dateTimeString = now.toLocaleString();
-            document.getElementById('currentDateTime').textContent = dateTimeString;
-        }
+            // Initial call to update date and time
+            updateDateTime();
 
-        // Initial call to update date and time
-        updateDateTime();
+            // Set interval to update date and time every second (1000 milliseconds)
+            setInterval(updateDateTime, 1000);
 
-        // Set interval to update date and time every second (1000 milliseconds)
-        setInterval(updateDateTime, 1000);
-
-        // Fetch and process data
-        fetchData();
+            // Fetch and process data
+            fetchData();
+        });
     </script>
 </body>
 </html>
