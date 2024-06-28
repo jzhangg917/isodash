@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en" x-data="{}" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ISO Market Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/2.8.2/alpine.min.js" defer></script>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .map-placeholder {
+            width: 100%;
+            height: auto;
+            border-radius: 10px; 
+        }
+        .logo {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 300px; 
+            height: auto; 
+        }
+    </style>
+</head>
+<body class="bg-gray-800 text-white font-sans">
+    <div class="container mx-auto px-1">
+        <header class="text-center my-8 relative">
+            <img src="KoreLogo.png" alt="Kore Logo" class="logo">
+            <h1 class="text-4xl font-bold">Ercot ISO Market Dashboard</h1>
+        </header>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="price-map bg-gray-700 p-6 rounded-lg shadow-lg">
+                <h2 class="text-xl font-semibold mb-4">Price Map</h2>
+                <div class="flex justify-center mb-4">
+                    <div class="flex space-x-4">
+                        <button class="btn-info px-4 py-2 rounded-full" :class="{'bg-blue-500': currentTab === 'realtime', 'bg-indigo-500': currentTab !== 'realtime'}" @click="currentTab = 'realtime'">Real Time</button>
+                        <button class="btn-info px-4 py-2 rounded-full" :class="{'bg-blue-500': currentTab === 'dayahead', 'bg-indigo-500': currentTab !== 'dayahead'}" @click="currentTab = 'dayahead'">Day Ahead</button>
+                    </div>
+                </div>
+                <div id="map" class="rounded-lg">
+                    <!-- Image Placeholder -->
+                    <img src="fillerimage.png" alt="Map Placeholder" class="map-placeholder">
+                </div>
+            </div>
+            <div class="resource-mix bg-gray-700 p-6 rounded-lg shadow-lg flex flex-col items-center">
+                <h2 class="text-xl font-semibold mb-4">Resource Mix</h2>
+                <div class="chart-container">
+                    <canvas id="renewableChart"></canvas>
+                </div>
+            </div>
+            <div class="system-demand bg-gray-700 p-6 rounded-lg shadow-lg flex flex-col items-center">
+                <h2 class="text-xl font-semibold mb-4">System Demand</h2>
+                <canvas id="demandChart"></canvas>
+                <div class="snapshot mt-4 p-3 w-full bg-gray-800 rounded-lg shadow-inner">
+                    <h2 class="text-center text-lg font-semibold mb-2">Today's Snapshot</h2>
+                    <p id="currentDateTime" class="text-center text-lg font-semibold mb-2"></p>
+                    <div class="snapshot-content grid grid-cols-2 gap-2 text-sm">
+                        <div class="snapshot-item flex justify-between bg-gray-900 p-2 rounded-md">
+                            <div class="snapshot-title">Available Capacity:</div>
+                            <div class="snapshot-value" id="availableCapacity">Loading...</div>
+                        </div>
+                        <div class="snapshot-item flex justify-between bg-gray-900 p-2 rounded-md">
+                            <div class="snapshot-title">Forecasted Peak Demand:</div>
+                            <div class="snapshot-value" id="forecastedPeakDemand">Loading...</div>
+                        </div>
+                        <div class="snapshot-item flex justify-between bg-gray-900 p-2 rounded-md">
+                            <div class="snapshot-title">Surplus Capacity:</div>
+                            <div class="snapshot-value" id="surplusCapacity">Loading...</div>
+                        </div>
+                        <div class="snapshot-item flex justify-between bg-gray-900 p-2 rounded-md">
+                            <div class="snapshot-title">Yesterday's Peak Demand:</div>
+                            <div class="snapshot-value" id="yesterdayPeakDemand">Loading...</div>
+                        </div>
+                        <div class="snapshot-title">Status:</div>
+                        <div class="snapshot-value"><span class="bg-green-500 text-white px-2 py-1 rounded-full">Normal</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="mt-8 text-center">
+            <button class="btn btn-primary mr-4 rounded-full">More Real-Time Data</button>
+            <button class="btn btn-secondary rounded-full">Morning Report</button>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            let renewableCtx;
+            let demandCtx;
+
+            let renewableChartInstance = null;
+            let demandChartInstance = null;
+
+            const createChart = (ctx, type, data, options) => {
+                if (ctx.chart) {
+                    ctx.chart.destroy();
+                }
+                const chart = new Chart(ctx, {
+                    type: type,
+                    data: data,
+                    options: options
+                });
+                ctx.chart = chart;
+                return chart;
+            };
+
+            const getCurrentDateString = () => {
+                const today = new Date();
+                const year = today.getFullYear();
+                const month = String(today.getMonth() + 1).padStart(2, '0');
+                const day = String(today.getDate()).padStart(2, '0');
+                return `${year}-${month}-${day}`;
+            }
+
+            async function fetchData() {
+                try {
+
+                    const currentDateFuel = getCurrentDateString();
+                    const startTimeFuel = `${currentDateFuel}%2000:00:00`
+                    const endTimeFuel = `${currentDateFuel}%2014:05:00` 
+                    const urlFuel = `http://nri128:65/snowflake/data/get_fuel_mix.php?ISO=ISNE&start=${(startTimeFuel)}&end=${(endTimeFuel)}`
+
+                    const fuelResponse = await fetch(urlFuel);
+                    const fuelData = await fuelResponse.json();
+                    console.log('Fetched Fuel Data:', fuelData);  // Log fetched fuel data to console
+                    processFuelData(fuelData);
+
+                    const currentDate = getCurrentDateString();
+                    const startTime = `${currentDate}%2000:00:00`
+                    const endTime = `${currentDate}%2023:05:00`
+                    const url = `http://nri128:65/snowflake/data/get_rt_da_load.php?ISO=ISNE&start=${(startTime)}&end=${(endTime)}`;
+
+                    const demandResponse = await fetch(url);
+                    const demandData = await demandResponse.json();
+                    console.log('Fetched Demand Data:', demandData);  // Log fetched demand data to console
+                    processDemandData(demandData);
+                } catch (error) {
+                    console.error('Error fetching data:', error);
+                }
+            }
+
+            function processFuelData(data) {
+                const timestamps = [];
+                const solarData = [];
+                const windData = [];
+                const refuseData = [];
+                const woodData = [];
+                const oilData = [];
+                const nuclearData = [];
+                const totalGenData = [];
+                const naturalGasData = [];
+                const landfillGasData = [];
+                const hydroData = [];
+                const coalData = [];
+
+                data.forEach(item => {
+                    const time = item.timestamp.split(' ')[1];
+                    timestamps.push(time);
+                    console.log('Processing Item:', item.shortname, item.value);  // Log each item to console
+                    switch(item.shortname) {
+                        case 'Actual Solar Gen-NEISO':
+                            solarData.push(item.value);
+                            break;
+                        case 'RT Wind (10 Min) Gen - NEISO':
+                            windData.push(item.value);
+                            break;
+                        case 'NEISO_REFUSE_GENMW':
+                            refuseData.push(item.value);
+                            break;
+                        case 'NEISO_WOOD_GENMW':
+                            woodData.push(item.value);
+                            break;
+                        case 'NEISO_OIL_GENMW':
+                            oilData.push(item.value);
+                            break;
+                        case 'NEISO_NUCLEAR_GENMW':
+                            nuclearData.push(item.value);
+                            break;
+                        case 'NEISO_TOTAL_GENMW':
+                            totalGenData.push(item.value);
+                            break;
+                        case 'NEISO_NATURAL_GAS_GENMW':
+                            naturalGasData.push(item.value);
+                            break;
+                        case 'NEISO_LANDFILL_GAS_GENMW':
+                            landfillGasData.push(item.value);
+                            break;
+                        case 'NEISO_HYDRO_GENMW':
+                            hydroData.push(item.value);
+                            break;
+                        case 'NEISO_COAL_GENMW':
+                            coalData.push(item.value);
+                            break;
+                    }
+                });
+
+                updateRenewableChart(timestamps, solarData, windData, refuseData, woodData, landfillGasData);
+            }
+
+            function processDemandData(data) {
+                const timestamps = [];
+                const rtLoadData = [];
+                const daLoadData = [];
+
+                data.forEach(item => {
+                    const time = item.timestamp.split(' ')[1];
+                    timestamps.push(time);
+                    console.log('Processing Item:', item.rt_load, item.da_load);  // Log each item to console
+                    rtLoadData.push(item.rt_load);
+                    daLoadData.push(item.da_load);
+                });
+
+                updateDemandChart(timestamps, rtLoadData, daLoadData);
+            }
+
+            function updateRenewableChart(timestamps, solarData, windData, refuseData, woodData, landfillGasData) {
+                renewableCtx = document.getElementById('renewableChart').getContext('2d');
+
+                const resourceOptions = {
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'bottom',
+                            labels: {
+                                color: 'white'
+                            }
+                        },
+                        tooltip: {
+                            enabled: true,
+                            titleColor: 'white',
+                            bodyColor: 'white'
+                        }
+                    },
+                    maintainAspectRatio: true // Ensure aspect ratio is maintained
+                };
+
+                renewableChartInstance = createChart(renewableCtx, 'doughnut', {
+                    labels: ['Solar', 'Refuse', 'Wood', 'Wind', 'Landfill Gas'],
+                    datasets: [{
+                        data: [solarData[solarData.length - 1], refuseData[refuseData.length - 1], woodData[woodData.length - 1], windData[windData.length - 1], landfillGasData[landfillGasData.length - 1]],
+                        backgroundColor: ['#ffcd56', '#ff9f40', '#ff6384', '#36a2eb', '#9966ff']
+                    }]
+                }, resourceOptions);
+            }
+
+            function updateDemandChart(timestamps, rtLoadData, daLoadData) {
+                demandCtx = document.getElementById('demandChart').getContext('2d');
+
+                const defaultOptions = {
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'bottom',
+                            labels: {
+                                color: 'white'
+                            }
+                        },
+                        tooltip: {
+                            enabled: true,
+                            titleColor: 'white',
+                            bodyColor: 'white'
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: {
+                                color: 'white'
+                            }
+                        },
+                        y: {
+                            ticks: {
+                                color: 'white',
+                                stepSize: 2000,
+                                beginAtZero: true, // Ensure y-axis starts at zero
+                                max: 16000, // Set a reasonable max value
+                            }
+                        }
+                    },
+                    maintainAspectRatio: true // Ensure aspect ratio is maintained
+                };
+
+                demandChartInstance = createChart(demandCtx, 'line', {
+                    labels: timestamps,
+                    datasets: [{
+                        label: 'Real-Time Load (MW)',
+                        data: rtLoadData,
+                        borderColor: '#36a2eb',
+                        fill: false
+                    }, {
+                        label: 'Day-Ahead Load (MW)',
+                        data: daLoadData,
+                        borderColor: '#ffcd56',
+                        fill: false
+                    }]
+                }, defaultOptions);
+            }
+
+            function updateSnapshot(totalGenData) {
+                document.getElementById('availableCapacity').textContent = `${totalGenData[totalGenData.length - 1]} MW`;
+                document.getElementById('forecastedPeakDemand').textContent = '16,000 MW'; // Replace with actual data if available
+                document.getElementById('surplusCapacity').textContent = `${totalGenData[totalGenData.length - 1] - 16000} MW`; // Replace with actual data if available
+                document.getElementById('yesterdayPeakDemand').textContent = '15,228 MW'; // Replace with actual data if available
+            }
+
+            // Function to update date and time
+            function updateDateTime() {
+                const now = new Date();
+                const dateTimeString = now.toLocaleString();
+                document.getElementById('currentDateTime').textContent = dateTimeString;
+            }
+
+            // Initial call to update date and time
+            updateDateTime();
+
+            // Set interval to update date and time every second (1000 milliseconds)
+            setInterval(updateDateTime, 1000);
+
+            // Fetch and process data and update every 15 minutes
+            fetchData();
+            setInterval(fetchData, 900000);
+        });
+    </script>
+</body>
+</html>
