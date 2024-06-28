@@ -109,21 +109,27 @@
 
             async function fetchData() {
                 try {
-                    const fuelResponse = await fetch('http://nri128:65/snowflake/data/get_fuel_mix.php?ISO=ISNE&start=2024-06-11%2014:00:00&end=2024-06-12%2014:05:00');
-                    const fuelData = await fuelResponse.json();
-                    console.log('Fetched Fuel Data:', fuelData);  // Log fetched fuel data to console
-                    processFuelData(fuelData);
-
-                    const demandResponse = await fetch('http://nri128:65/snowflake/data/get_rt_da_load.php?ISO=ISNE&start=2024-06-11%2000:00:00&end=2024-06-11%2014:05:00');
-                    const demandData = await demandResponse.json();
-                    console.log('Fetched Demand Data:', demandData);  // Log fetched demand data to console
-                    processDemandData(demandData);
+                    const response = await fetch('http://nri128:65/snowflake/data/get_fuel_mix.php?ISO=ISNE&start=2024-06-11%2014:00:00&end=2024-06-12%2014:05:00');
+                    const data = await response.json();
+                    console.log('Fetched Data:', data);  // Log fetched data to console
+                    processData(data);
                 } catch (error) {
                     console.error('Error fetching data:', error);
                 }
             }
 
-            function processFuelData(data) {
+            async function fetchDemandData() {
+                try {
+                    const response = await fetch('http://nri128:65/snowflake/data/get_rt_da_load.php?ISO=ISNE&start=2024-06-11%2000:00:00&end=2024-06-11%2014:05:00');
+                    const data = await response.json();
+                    console.log('Fetched Demand Data:', data);  // Log fetched data to console
+                    processDemandData(data);
+                } catch (error) {
+                    console.error('Error fetching data:', error);
+                }
+            }
+
+            function processData(data) {
                 const timestamps = [];
                 const solarData = [];
                 const windData = [];
@@ -189,7 +195,7 @@
                 data.forEach(item => {
                     const time = item.timestamp.split(' ')[1];
                     timestamps.push(time);
-                    console.log('Processing Item:', item.rt_load, item.da_load);  // Log each item to console
+                    console.log('Processing Item:', item.timestamp, item.rt_load, item.da_load);  // Log each item to console
                     rtLoadData.push(item.rt_load);
                     daLoadData.push(item.da_load);
                 });
@@ -230,7 +236,7 @@
             function updateDemandChart(timestamps, rtLoadData, daLoadData) {
                 demandCtx = document.getElementById('demandChart').getContext('2d');
 
-                const defaultOptions = {
+                const demandOptions = {
                     plugins: {
                         legend: {
                             display: true,
@@ -254,8 +260,15 @@
                         y: {
                             ticks: {
                                 color: 'white',
-                                beginAtZero: true, // Ensure y-axis starts at zero
-                                max: 15000, // Set a reasonable max value
+                                callback: function(value) {
+                                    if (value % 2000 === 0 && value >= 10000 && value <= 16000) {
+                                        return value / 1000 + 'k';  // Convert values to '10k', '12k', '14k', '16k'
+                                    }
+                                    return ''; // Skip other values
+                                },
+                                beginAtZero: false, // Ensure y-axis starts at 10k
+                                min: 10000, // Set minimum value
+                                max: 16000, // Set maximum value
                             }
                         }
                     },
@@ -275,7 +288,7 @@
                         borderColor: '#ffcd56',
                         fill: false
                     }]
-                }, defaultOptions);
+                }, demandOptions);
             }
 
             function updateSnapshot(totalGenData) {
@@ -300,6 +313,7 @@
 
             // Fetch and process data
             fetchData();
+            fetchDemandData();
         });
     </script>
 </body>
