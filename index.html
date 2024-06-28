@@ -121,7 +121,7 @@
 
                     const currentDateFuel = getCurrentDateString();
                     const startTimeFuel = `${currentDateFuel}%2000:00:00`
-                    const endTimeFuel = `${currentDateFuel}%2014:05:00` 
+                    const endTimeFuel = `${currentDateFuel}%2023:05:00` 
                     const urlFuel = `http://nri128:65/snowflake/data/get_fuel_mix.php?ISO=ISNE&start=${(startTimeFuel)}&end=${(endTimeFuel)}`
 
                     const fuelResponse = await fetch(urlFuel);
