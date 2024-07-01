@@ -4,11 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ISO Market Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/2.8.2/alpine.min.js" defer></script>
-    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/moment/min/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-moment@1.0.0/dist/chartjs-adapter-moment.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-doughnutlabel@latest/dist/chartjs-plugin-doughnutlabel.min.js"></script>
     <style>
         .map-placeholder {
             width: 100%;
@@ -28,7 +29,7 @@
     <div class="container mx-auto px-1">
         <header class="text-center my-8 relative">
             <img src="KoreLogo.png" alt="Kore Logo" class="logo">
-            <h1 class="text-4xl font-bold">ISO-NE Market Dashboard</h1>
+            <h1 class="text-4xl font-bold">ISONE Market Dashboard</h1>
         </header>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div class="price-map bg-gray-700 p-6 rounded-lg shadow-lg">
@@ -45,9 +46,9 @@
                 </div>
             </div>
             <div class="resource-mix bg-gray-700 p-6 rounded-lg shadow-lg flex flex-col items-center">
-                <h2 class="text-xl font-semibold mb-4">Fuel Mix</h2>
-                <div class="chart-container">
-                    <canvas id="resourcesChart"></canvas>
+                <h2 class="text-xl font-semibold mb-4">Resource Mix</h2>
+                <div class="chart-container mb-4">
+                    <canvas id="resourceChart"></canvas>
                 </div>
                 <div class="chart-container">
                     <canvas id="renewableChart"></canvas>
@@ -62,22 +63,24 @@
                     <div class="snapshot-content grid grid-cols-2 gap-2 text-sm">
                         <div class="snapshot-item flex justify-between bg-gray-900 p-2 rounded-md">
                             <div class="snapshot-title">Available Capacity:</div>
-                            <div class="snapshot-value" id="availableCapacity">Loading...</div>
+                            <div class="snapshot-value">20,417 MW</div>
                         </div>
                         <div class="snapshot-item flex justify-between bg-gray-900 p-2 rounded-md">
                             <div class="snapshot-title">Forecasted Peak Demand:</div>
-                            <div class="snapshot-value" id="forecastedPeakDemand">Loading...</div>
+                            <div class="snapshot-value">16,000 MW</div>
                         </div>
                         <div class="snapshot-item flex justify-between bg-gray-900 p-2 rounded-md">
                             <div class="snapshot-title">Surplus Capacity:</div>
-                            <div class="snapshot-value" id="surplusCapacity">Loading...</div>
+                            <div class="snapshot-value">2,136 MW</div>
                         </div>
                         <div class="snapshot-item flex justify-between bg-gray-900 p-2 rounded-md">
                             <div class="snapshot-title">Yesterday's Peak Demand:</div>
-                            <div class="snapshot-value" id="yesterdayPeakDemand">Loading...</div>
+                            <div class="snapshot-value">15,228 MW</div>
                         </div>
-                        <div class="snapshot-title">Status:</div>
-                        <div class="snapshot-value"><span class="bg-green-500 text-white px-2 py-1 rounded-full">Normal</span></div>
+                        <div class="snapshot-item flex justify-between bg-gray-900 p-2 rounded-md">
+                            <div class="snapshot-title">Status:</div>
+                            <div class="snapshot-value"><span class="bg-green-500 text-white px-2 py-1 rounded-full">Normal</span></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -90,7 +93,20 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
     <script src="script.js"></script>
+    <script>
+        // Function to update date and time
+        function updateDateTime() {
+            const now = new Date();
+            const dateTimeString = now.toLocaleString();
+            document.getElementById('currentDateTime').textContent = dateTimeString;
+        }
+
+        // Initial call to update date and time
+        updateDateTime();
+
+        // Set interval to update date and time every second (1000 milliseconds)
+        setInterval(updateDateTime, 1000);
+    </script>
 </body>
 </html>
